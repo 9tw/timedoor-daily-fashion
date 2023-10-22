@@ -11,7 +11,7 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
     return (
-        <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Navigator initialRouteName="AddProduct">
             <Drawer.Screen
                 name="Home"
                 component={HomeScreen}
