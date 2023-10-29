@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { InputComponent } from '../components/InputComponent';
 import SelectDropdown from 'react-native-select-dropdown';
 import { categoryList } from '../../data/Data';
+import realm from '../../store/realm';
 
 const AddProductScreen = () => {
+    const dropdownRef = useRef({});
     const [productData, setProductData] = useState({
         productName: '',
         imagePath: '',
@@ -38,6 +40,47 @@ const AddProductScreen = () => {
             ...productData,
             [type]: value
         });
+    };
+
+    const saveData = () => {
+        if (productData.productName === '' || productData.imagePath === '' || productData.description === '' ||
+            productData.price === '' || productData.category === '') {
+            alert('Please fill all your product information!');
+        } else if (productData.phoneNumber === '' && productData.instagram === '' && productData.facebook === '') {
+            alert('Please fill at least one seller contact!');
+        } else {
+            const allData = realm.objects('Product');
+            const lastId =
+                allData.length === 0 ?
+                    0
+                    :
+                    allData[allData.length - 1].id;
+            realm.write(() => {
+                realm.create('Product', {
+                    id: lastId + 1,
+                    productName: productData.productName,
+                    imagePath: productData.imagePath,
+                    category: productData.category,
+                    description: productData.description,
+                    price: parseInt(productData.price),
+                    instagram: productData.instagram,
+                    facebook: productData.facebook,
+                    phoneNumber: productData.phoneNumber
+                });
+            });
+            alert('Successfully save your product!');
+            setProductData({
+                productName: '',
+                imagePath: '',
+                category: null,
+                description: '',
+                price: '',
+                instagram: '',
+                facebook: '',
+                phoneNumber: ''
+            });
+            dropdownRef.current.reset();
+        };
     };
 
     useEffect(() => {
@@ -86,6 +129,7 @@ const AddProductScreen = () => {
                         }}
                         buttonStyle={styles.selectDropdown}
                         buttonTextStyle={styles.selectText}
+                        ref={dropdownRef}
                     />
                 </View>
                 <View style={styles.horizontalContainer}>
@@ -132,6 +176,7 @@ const AddProductScreen = () => {
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={styles.saveButton}
+                        onPress={() => saveData()}
                     >
                         <Text style={styles.saveText}>SAVE</Text>
                     </TouchableOpacity>
