@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { InputComponent } from '../components/InputComponent';
+import SelectDropdown from 'react-native-select-dropdown';
+import { categoryList } from '../../data/Data';
 
 const AddProductScreen = () => {
     const [productData, setProductData] = useState({
@@ -69,6 +71,21 @@ const AddProductScreen = () => {
                         placeholder='Product Name'
                         value={productData.productName}
                         onChangeText={(text) => onInputChange('productName', text)}
+                    />
+                    <SelectDropdown
+                        data={categoryList}
+                        defaultButtonText='Select category'
+                        onSelect={(item) => {
+                            onInputChange('category', item.id)
+                        }}
+                        buttonTextAfterSelection={(item) => {
+                            return item.name
+                        }}
+                        rowTextForSelection={(item) => {
+                            return item.name
+                        }}
+                        buttonStyle={styles.selectDropdown}
+                        buttonTextStyle={styles.selectText}
                     />
                 </View>
                 <View style={styles.horizontalContainer}>
@@ -171,6 +188,16 @@ const styles = StyleSheet.create({
     },
     saveText: {
         color: 'black'
+    },
+    selectDropdown: {
+        borderRadius: 10,
+        backgroundColor: 'skyblue',
+        width: 150,
+        height: 30,
+        marginLeft: 8
+    },
+    selectText: {
+        fontSize: 12
     }
 });
 
