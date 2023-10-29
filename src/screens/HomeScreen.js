@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react
 import { imageSlider, categoryList } from '../../data/Data';
 import { SliderBox } from 'react-native-image-slider-box';
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
+    const { navigation } = props;
     return (
         <View style={styles.mainContainer}>
             <SliderBox
@@ -27,6 +28,7 @@ const HomeScreen = () => {
                         return (
                             <TouchableOpacity
                                 style={styles.button}
+                                onPress={() => navigation.navigate('ShowProduct', { categoryId: item.id })}
                             >
                                 <Image
                                     source={{ uri: item.icon }}

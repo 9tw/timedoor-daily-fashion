@@ -12,7 +12,7 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
     return (
-        <Drawer.Navigator initialRouteName="AddProduct">
+        <Drawer.Navigator initialRouteName="Home">
             <Drawer.Screen
                 name="Home"
                 component={HomeScreen}
@@ -52,7 +52,7 @@ const DrawerNav = () => {
 const MainNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="ShowProduct">
+            <Stack.Navigator initialRouteName="Drawer">
                 <Stack.Screen
                     name="Drawer"
                     component={DrawerNav}

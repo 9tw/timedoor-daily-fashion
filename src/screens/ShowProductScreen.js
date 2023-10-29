@@ -9,17 +9,21 @@ import {
 const ShowProductScreen = (props) => {
     const { navigation } = props;
     const [data, setData] = useState([]);
+    const { route } = props;
+    const category = route.params.categoryId;
+
     const collectData = () => {
-        const allData = realm.objects('Product');
+        const allData = realm.objects('Product').filtered(`category = ${category}`);
         setData(allData);
     };
+
     useEffect(() => {
-        const productPage = navigation.
-            addListener('focus', () => {
-                collectData();
-            });
+        const productPage = navigation.addListener('focus', () => {
+            collectData();
+        });
         return productPage;
     }, []);
+
     return (
         <View style={styles.mainContainer}>
             <FlatList
@@ -58,6 +62,11 @@ const ShowProductScreen = (props) => {
                         </TouchableOpacity>
                     )
                 }}
+                ListEmptyComponent={
+                    <View style={{ alignItems: 'center' }}>
+                        <Text>No items.</Text>
+                    </View>
+                }
             />
         </View>
     )
