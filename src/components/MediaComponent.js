@@ -3,6 +3,10 @@ import {
     TouchableOpacity, Text, StyleSheet,
     Image
 } from 'react-native';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from 'react-native-responsive-screen-hooks';
 
 export const MediaComponent = (props) => {
     const { value } = props;
@@ -29,11 +33,11 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'black',
-        fontSize: 18,
+        fontSize:hp('2.5%'),
         marginLeft: 8
     },
     image: {
-        width: 30,
-        height: 30
+        width: wp('25%'),
+        height: wp('25%')
     }
 });

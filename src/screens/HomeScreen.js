@@ -2,6 +2,10 @@ import React from 'react'
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 import { imageSlider, categoryList } from '../../data/Data';
 import { SliderBox } from 'react-native-image-slider-box';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from 'react-native-responsive-screen-hooks';
 
 const HomeScreen = (props) => {
     const { navigation } = props;
@@ -11,7 +15,7 @@ const HomeScreen = (props) => {
                 images={imageSlider}
                 autoplay={true}
                 circleLoop={true}
-                sliderBoxHeight={250}
+                sliderBoxHeight={hp('30%')}
             />
             <View style={styles.titleContainer}>
                 <Text style={styles.text}>
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        fontSize: 18,
+        fontSize: hp('2.5%'),
         fontWeight: 'bold',
         color: 'black'
     },
@@ -67,13 +71,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#7CAF58',
         borderRadius: 10,
-        height: 130,
+        height: hp('17%'),
         justifyContent: 'center',
         alignItems: 'center'
     },
     icon: {
-        width: 100,
-        height: 100,
+        width: wp('20%'),
+        height: wp('12%'),
         resizeMode: 'contain'
     },
     itemName: {

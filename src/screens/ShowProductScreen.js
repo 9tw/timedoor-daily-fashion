@@ -7,6 +7,10 @@ import realm from '../../store/realm';
 import React, { useState, useEffect } from 'react';
 import { Icon } from 'react-native-elements';
 import { MediaComponent } from '../components/MediaComponent';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from 'react-native-responsive-screen-hooks';
 
 const ShowProductScreen = (props) => {
     const { navigation } = props
@@ -196,8 +200,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     image: {
-        width: 100,
-        height: 100
+        width: wp('25%'),
+        height: wp('25%')
     },
     textContainer: {
         flex: 1,
@@ -206,12 +210,12 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'black',
-        fontSize: 18,
+        fontSize: hp('2.5%'),
         fontWeight: 'bold'
     },
     text: {
         color: 'black',
-        fontSize: 16
+        fontSize: hp('2%')
     },
     modalContainer: {
         backgroundColor: 'rgba(255,255,255,0.9)',
