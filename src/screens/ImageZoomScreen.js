@@ -4,6 +4,7 @@ import ImageZoom from 'react-native-image-pan-zoom';
 
 const ImageZoomScreen = (props) => {
     const { route } = props;
+    const imageSource = route.params.imagePath;
 
     return (
         <View style={styles.mainContainer}>
@@ -15,6 +16,7 @@ const ImageZoomScreen = (props) => {
             >
                 <Image
                     style={styles.image}
+                    source={{ uri: imageSource }}
                 />
             </ImageZoom>
         </View>

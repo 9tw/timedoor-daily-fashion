@@ -63,13 +63,16 @@ const ShowProductScreen = (props) => {
                         <TouchableOpacity
                             style={styles.itemButton}
                         >
-
                             <View style={styles.productContainer}>
-
-                                <Image
-                                    style={styles.image}
-                                    source={{ uri: item.imagePath }}
-                                />
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('ImageZoom', {
+                                        imagePath: item.imagePath
+                                    })}>
+                                    <Image
+                                        style={styles.image}
+                                        source={{ uri: item.imagePath }}
+                                    />
+                                </TouchableOpacity>
                                 <View style={styles.textContainer}>
                                     <Text style={styles.title}>
 
