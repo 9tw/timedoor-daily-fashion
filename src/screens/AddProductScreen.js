@@ -146,6 +146,7 @@ const AddProductScreen = () => {
                         isIcon={true}
                         name="dollar"
                         type="font-awesome"
+                        keyboardType="numeric"
                     />
                 </View>
                 <Text style={styles.sellerText}>Seller Contact</Text>
@@ -156,6 +157,7 @@ const AddProductScreen = () => {
                     isIcon={true}
                     name="whatsapp"
                     type="font-awesome"
+                    keyboardType="phone-pad"
                 />
                 <InputComponent
                     placeholder='Instagram username (ex : timedooracademy)'

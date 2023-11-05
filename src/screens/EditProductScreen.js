@@ -50,13 +50,28 @@ const EditProductScreen = (props) => {
     };
 
     const saveData = () => {
-        if (productData.productName === '' || productData.imagePath === '' || productData.description === '' ||
-            productData.price === '' || productData.category === null) {
+        const updatedData = realm.objects('Product').filtered(`id = ${idProduct}`)[0];
+        
+        if (productData.productName === '' || 
+            productData.imagePath === '' || 
+            productData.description === '' ||
+            productData.price === '' || 
+            productData.category === null
+        ) {
             alert('Please fill all your product information!');
         } else if (productData.phoneNumber === '' && productData.instagram === '' && productData.facebook === '') {
             alert('Please fill at least one seller contact!');
+        } else if (updatedData.productName === productData.productName &&
+            updatedData.imagePath === productData.imagePath &&
+            updatedData.category === productData.category &&
+            updatedData.description === productData.description &&
+            updatedData.price === parseInt(productData.price) &&
+            updatedData.instagram === productData.instagram &&
+            updatedData.facebook === productData.facebook &&
+            updatedData.phoneNumber === productData.phoneNumber
+        ) {
+            alert('Nothing to update!');
         } else {
-            const updatedData = realm.objects('Product').filtered(`id = ${idProduct}`)[0];
             realm.write(() => {
                 updatedData.productName = productData.productName;
                 updatedData.imagePath = productData.imagePath;
@@ -150,6 +165,7 @@ const EditProductScreen = (props) => {
                         isIcon={true}
                         name="dollar"
                         type="font-awesome"
+                        keyboardType="numeric"
                     />
                 </View>
                 <Text style={styles.sellerText}>Seller Contact</Text>
@@ -160,6 +176,7 @@ const EditProductScreen = (props) => {
                     isIcon={true}
                     name="whatsapp"
                     type="font-awesome"
+                    keyboardType="phone-pad"
                 />
                 <InputComponent
                     placeholder='Instagram username (ex : timedooracademy)'
