@@ -5,6 +5,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Icon } from "react-native-elements";
 import HomeScreen from "../screens/HomeScreen";
 import AddProductScreen from "../screens/AddProductScreen";
+import EditProductScreen from "../screens/EditProductScreen";
 import ShowProductScreen from "../screens/ShowProductScreen";
 import ImageZoomScreen from "../screens/ImageZoomScreen";
 
@@ -53,7 +54,7 @@ const DrawerNav = () => {
 const MainNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Drawer">
+            <Stack.Navigator initialRouteName="EditProduct">
                 <Stack.Screen
                     name="Drawer"
                     component={DrawerNav}
@@ -66,6 +67,17 @@ const MainNavigator = () => {
                     component={ShowProductScreen}
                     options={{
                         title: 'Product',
+                        headerTitleAlign: 'center',
+                        headerStyle: {
+                            backgroundColor: '#D1E5C2'
+                        },
+                    }}
+                />
+                <Stack.Screen
+                    name="EditProduct"
+                    component={EditProductScreen}
+                    options={{
+                        title: 'Edit Product',
                         headerTitleAlign: 'center',
                         headerStyle: {
                             backgroundColor: '#D1E5C2'
