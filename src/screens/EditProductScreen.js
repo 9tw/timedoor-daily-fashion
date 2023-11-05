@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Alert } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { InputComponent } from '../components/InputComponent';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -11,6 +11,7 @@ import {
 } from 'react-native-responsive-screen-hooks';
 
 const EditProductScreen = (props) => {
+    const { navigation } = props
     const { route } = props;
     const idProduct = route.params.idProduct;
 
@@ -24,6 +25,57 @@ const EditProductScreen = (props) => {
         facebook: '',
         phoneNumber: ''
     });
+
+    const onInputChange = (type, value) => {
+        setProductData({
+            ...productData,
+            [type]: value
+        });
+    };
+
+    const addImage = () => {
+        ImagePicker.openPicker({
+            width: 2000,
+            height: 2000,
+            cropping: true
+        }).then(image => {
+            console.log(image)
+            setProductData({
+                ...productData,
+                imagePath: image.path
+            });
+        }).catch(errorMessage => {
+            console.log(errorMessage);
+        });
+    };
+
+    const saveData = () => {
+        if (productData.productName === '' || productData.imagePath === '' || productData.description === '' ||
+            productData.price === '' || productData.category === null) {
+            alert('Please fill all your product information!');
+        } else if (productData.phoneNumber === '' && productData.instagram === '' && productData.facebook === '') {
+            alert('Please fill at least one seller contact!');
+        } else {
+            const updatedData = realm.objects('Product').filtered(`id = ${idProduct}`)[0];
+            realm.write(() => {
+                updatedData.productName = productData.productName;
+                updatedData.imagePath = productData.imagePath;
+                updatedData.category = productData.category;
+                updatedData.description = productData.description;
+                updatedData.price = parseInt(productData.price);
+                updatedData.instagram = productData.instagram;
+                updatedData.facebook = productData.facebook;
+                updatedData.phoneNumber = productData.phoneNumber
+            });
+            Alert.alert(
+                "Success",
+                "Successfully update your product information!",
+                [{
+                    text: "OK", onPress: () => navigation.goBack()
+                }]
+            );
+        }
+    };
 
     useEffect(() => {
         const data = realm.objects('Product').filtered(`id = ${idProduct}`)[0];
@@ -81,6 +133,7 @@ const EditProductScreen = (props) => {
                         }}
                         buttonStyle={styles.selectDropdown}
                         buttonTextStyle={styles.selectText}
+                        defaultValueByIndex={productData.category - 1}
                     />
                 </View>
                 <View style={styles.horizontalContainer}>
