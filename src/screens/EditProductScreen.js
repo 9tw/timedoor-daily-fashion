@@ -10,7 +10,10 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen-hooks';
 
-const EditProductScreen = () => {
+const EditProductScreen = (props) => {
+    const { route } = props;
+    const idProduct = route.params.idProduct;
+
     const [productData, setProductData] = useState({
         productName: '',
         imagePath: '',
@@ -21,6 +24,20 @@ const EditProductScreen = () => {
         facebook: '',
         phoneNumber: ''
     });
+
+    useEffect(() => {
+        const data = realm.objects('Product').filtered(`id = ${idProduct}`)[0];
+        setProductData({
+            productName: data.productName,
+            imagePath: data.imagePath,
+            category: data.category,
+            description: data.description,
+            price: String(data.price),
+            instagram: data.instagram,
+            facebook: data.facebook,
+            phoneNumber: data.phoneNumber
+        });
+    }, [idProduct]);
 
     return (
         <View style={styles.mainContainer}>
@@ -145,7 +162,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     sellerText: {
-        fontSize:hp('2.5%'),
+        fontSize: hp('2.5%'),
         fontWeight: 'bold',
         marginTop: 16,
         marginLeft: 8,

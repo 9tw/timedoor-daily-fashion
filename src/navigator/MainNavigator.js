@@ -54,7 +54,7 @@ const DrawerNav = () => {
 const MainNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="EditProduct">
+            <Stack.Navigator initialRouteName="Drawer">
                 <Stack.Screen
                     name="Drawer"
                     component={DrawerNav}
