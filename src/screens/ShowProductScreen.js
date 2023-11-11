@@ -7,6 +7,7 @@ import realm from '../../store/realm';
 import React, { useState, useEffect } from 'react';
 import { Icon, CheckBox } from 'react-native-elements';
 import { MediaComponent } from '../components/MediaComponent';
+import { ButtonComponent } from '../components/ButtonComponent';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -33,7 +34,6 @@ const ShowProductScreen = (props) => {
         });
         setData(newData);
         console.log(newData);
-        // setData(allData);
     };
 
     const buyProduct = (whatsapp, instagramId,
@@ -64,6 +64,37 @@ const ShowProductScreen = (props) => {
             return item;
         });
         setData(newData)
+    };
+
+    const onDelete = () => {
+        const checkedTrue = [];
+        data.forEach((item) => {
+            if (item.checkedStatus) {
+                checkedTrue.push(item.id)
+            }
+        });
+        if (checkedTrue.length != 0) {
+            realm.write(() => {
+                for (i = 0; i < checkedTrue.length; i++) {
+                    const removeData = realm.objects('Product').filtered(`id = ${checkedTrue[i]}`);
+                    realm.delete(removeData);
+                }
+            });
+            alert('Successfully remove the products!');
+            setIsRemove(false);
+            collectData();
+        } else {
+            alert('Nothing to remove!');
+        }
+    };
+
+    const onCancel = () => {
+        const newData = data.map((item) => {
+            item.checkedStatus = false;
+            return item;
+        })
+        setData(newData)
+        setIsRemove(false);
     };
 
     useEffect(() => {
@@ -203,6 +234,23 @@ const ShowProductScreen = (props) => {
                     :
                     null
             }
+            {
+                isRemove ?
+                    <View style={styles.buttonContainer}>
+                        <ButtonComponent
+                            backgroundColor="red"
+                            title="Delete"
+                            onPress={() => onDelete()}
+                        />
+                        <ButtonComponent
+                            backgroundColor="green"
+                            title="Cancel"
+                            onPress={() => onCancel()}
+                        />
+                    </View>
+                    :
+                    null
+            }
         </View>
     )
 }
@@ -275,7 +323,11 @@ const styles = StyleSheet.create({
     checkBox: {
         position: 'absolute',
         right: 0
-    }
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        height: hp('7 %'),
+    },
 });
 
 export default ShowProductScreen
