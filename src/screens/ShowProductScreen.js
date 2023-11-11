@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import realm from '../../store/realm';
 import React, { useState, useEffect } from 'react';
-import { Icon } from 'react-native-elements';
+import { Icon, CheckBox } from 'react-native-elements';
 import { MediaComponent } from '../components/MediaComponent';
 import {
     widthPercentageToDP as wp,
@@ -18,6 +18,7 @@ const ShowProductScreen = (props) => {
     const category = route.params.categoryId;
     const [data, setData] = useState([]);
     const [isBuy, setIsBuy] = useState(false);
+    const [isRemove, setIsRemove] = useState(false);
     const [contact, setContact] = useState({
         phoneNumber: '',
         instagram: '',
@@ -26,7 +27,13 @@ const ShowProductScreen = (props) => {
 
     const collectData = () => {
         const allData = realm.objects('Product').filtered(`category = ${category}`);
-        setData(allData);
+        const newData = allData.map((item) => {
+            item.checkedStatus = false;
+            return item;
+        });
+        setData(newData);
+        console.log(newData);
+        // setData(allData);
     };
 
     const buyProduct = (whatsapp, instagramId,
@@ -49,6 +56,16 @@ const ShowProductScreen = (props) => {
         }
     };
 
+    const setCheckBox = (id, status) => {
+        const newData = data.map((item) => {
+            if (item.id === id) {
+                item.checkedStatus = !status;
+            }
+            return item;
+        });
+        setData(newData)
+    };
+
     useEffect(() => {
         const productPage = navigation.addListener('focus', () => {
             collectData();
@@ -67,6 +84,7 @@ const ShowProductScreen = (props) => {
                         <TouchableOpacity
                             style={styles.itemButton}
                             onPress={() => navigation.navigate('EditProduct', { idProduct: item.id })}
+                            onLongPress={() => setIsRemove(true)}
                         >
                             <View style={styles.productContainer}>
                                 <TouchableOpacity
@@ -80,30 +98,40 @@ const ShowProductScreen = (props) => {
                                 </TouchableOpacity>
                                 <View style={styles.textContainer}>
                                     <Text style={styles.title}>
-
                                         {item.productName}
                                     </Text>
-
                                     <Text style={styles.text}>
-
                                         {item.description}
                                     </Text>
-
                                     <Text style={styles.text}>
-
                                         $ {item.price}
                                     </Text>
                                 </View>
                             </View>
-                            <TouchableOpacity
-                                onPress={() => buyProduct(item.phoneNumber, item.instagram, item.facebook)}
-                            >
-                                <Icon
-                                    name="shoppingcart"
-                                    type="antdesign"
-                                    size={30}
-                                />
-                            </TouchableOpacity>
+                            {
+                                isRemove ?
+                                    <CheckBox
+                                        size={30}
+                                        containerStyle={styles.checkBox}
+                                        onPress={() => setCheckBox(item.id, item.
+                                            checkedStatus)}
+                                        checked={item.checkedStatus}
+                                    />
+                                    :
+                                    <TouchableOpacity
+                                        onPress={() => buyProduct(
+                                            item.phoneNumber,
+                                            item.instagram,
+                                            item.facebook)
+                                        }
+                                    >
+                                        <Icon
+                                            name="shoppingcart"
+                                            type="antdesign"
+                                            size={30}
+                                        />
+                                    </TouchableOpacity>
+                            }
                         </TouchableOpacity>
                     )
                 }}
@@ -243,8 +271,11 @@ const styles = StyleSheet.create({
     sellerText: {
         marginBottom: 8,
         marginTop: 32
+    },
+    checkBox: {
+        position: 'absolute',
+        right: 0
     }
-}
-);
+});
 
 export default ShowProductScreen
